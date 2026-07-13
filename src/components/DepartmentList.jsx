@@ -22,7 +22,8 @@ export default function DepartmentList({ onEdit }) {
           <table>
             <thead>
               <tr>
-                <th>ID</th>
+                <th>Status</th>
+                <th>Kode</th>
                 <th>Nama Department</th>
                 <th>Aksi</th>
               </tr>
@@ -30,7 +31,8 @@ export default function DepartmentList({ onEdit }) {
             <tbody>
               {depts.map((dept) => (
                 <tr key={dept.id}>
-                  <td>{dept.id}</td>
+                  <td>{dept.status}</td>
+                  <td><code className="dept-code">{dept.code}</code></td>
                   <td>{dept.name}</td>
                   <td className="actions">
                     <button
