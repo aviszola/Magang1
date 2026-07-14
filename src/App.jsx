@@ -1,40 +1,12 @@
-import { useEffect, useState } from 'react';
-import { login } from './api/auth';
-import DepartmentList from './components/DepartmentList';
-import DepartmentModal from './components/DepartmentModal';
+import useAuth from './hooks/useAuth';
+import DepartmentPage from './pages/Department';
+import RolePage from './pages/Role';
+import VehiclePage from './pages/Vehicle';
+import UserPage from './pages/User';
 import './App.css';
 
 export default function App() {
-  const [ready, setReady] = useState(false);
-  const [editItem, setEditItem] = useState(null);
-  const [showModal, setShowModal] = useState(false);
-  const [authError, setAuthError] = useState('');
-
-  useEffect(() => {
-    const token = localStorage.getItem('access_token');
-    if (token) {
-      setReady(true);
-      return;
-    }
-    login('magang@mail.com', 'magang')
-      .then(() => setReady(true))
-      .catch((err) => setAuthError('Gagal login: ' + (err.response?.data?.message ?? err.message)));
-  }, []);
-
-  function openAdd() {
-    setEditItem(null);
-    setShowModal(true);
-  }
-
-  function openEdit(dept) {
-    setEditItem(dept);
-    setShowModal(true);
-  }
-
-  function closeModal() {
-    setShowModal(false);
-    setEditItem(null);
-  }
+  const { ready, authError } = useAuth();
 
   if (authError) {
     return <div className="app"><p className="error-msg">{authError}</p></div>;
@@ -46,15 +18,13 @@ export default function App() {
 
   return (
     <div className="app">
-      <header>
-        <h1>Manajemen Department</h1>
-      </header>
-      <main>
-        <DepartmentList onAdd={openAdd} onEdit={openEdit} />
-        {showModal && (
-          <DepartmentModal editItem={editItem} onClose={closeModal} />
-        )}
-      </main>
+      <DepartmentPage />
+      <hr className="page-divider" />
+      <RolePage />
+      <hr className="page-divider" />
+      <VehiclePage />
+      <hr className="page-divider" />
+      <UserPage />
     </div>
   );
 }

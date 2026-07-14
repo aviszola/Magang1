@@ -4,6 +4,13 @@
   padding: 2rem 1.5rem;
 }
 
+.page-divider {
+  border: none;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  margin: 2.5rem 0;
+}
+
 .list-header {
   display: flex;
   justify-content: space-between;
@@ -16,6 +23,30 @@
   font-weight: 600;
   color: #c4b5fd;
   margin-bottom: 0;
+}
+
+.search-bar {
+  margin-bottom: 1rem;
+}
+
+.search-bar input {
+  width: 100%;
+  padding: 0.6rem 0.85rem;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  color: #e0e0e0;
+  font-size: 0.9rem;
+  transition: border-color 0.2s;
+}
+
+.search-bar input:focus {
+  outline: none;
+  border-color: #818cf8;
+}
+
+.search-bar input::placeholder {
+  color: #6b7280;
 }
 
 .btn-add {
@@ -206,10 +237,69 @@ header h1 {
   margin: 0.5rem 0;
 }
 
+.success-msg {
+  color: #4ade80;
+  font-size: 0.85rem;
+  margin: 0.5rem 0;
+  padding: 0.5rem 0.75rem;
+  background: rgba(74, 222, 128, 0.1);
+  border-radius: 8px;
+  border: 1px solid rgba(74, 222, 128, 0.2);
+}
+
 .form-actions {
   display: flex;
   gap: 0.75rem;
   margin-top: 1rem;
+}
+
+.confirm-dialog-inner {
+  text-align: center;
+  padding: 1rem 0;
+}
+
+.confirm-msg {
+  font-size: 1rem;
+  color: #e0e7ff;
+  margin-bottom: 1.5rem;
+  line-height: 1.5;
+}
+
+.confirm-actions {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+.btn-delete-confirm {
+  padding: 0.6rem 1.4rem;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.15s;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: #fff;
+}
+
+.btn-delete-confirm:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.btn-delete-confirm:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.status-badge {
+  display: inline-block;
+  padding: 0.15rem 0.55rem;
+  border-radius: 6px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  text-transform: capitalize;
 }
 
 .form-actions button {
