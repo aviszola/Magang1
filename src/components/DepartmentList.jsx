@@ -1,6 +1,6 @@
 import { useDepartments, useDeleteDepartment } from '../hooks/useDepartments';
 
-export default function DepartmentList({ onEdit }) {
+export default function DepartmentList({ onAdd, onEdit }) {
   const { data: depts, isLoading, isError, error } = useDepartments();
   const deleteMutation = useDeleteDepartment();
 
@@ -14,7 +14,10 @@ export default function DepartmentList({ onEdit }) {
 
   return (
     <div className="dept-list">
-      <h2>Daftar Department ({depts?.length ?? 0})</h2>
+      <div className="list-header">
+        <h2>Daftar Department ({depts?.length ?? 0})</h2>
+        <button className="btn-add" onClick={onAdd}>+ Tambah</button>
+      </div>
       {!depts?.length ? (
         <p className="status-msg">Belum ada department.</p>
       ) : (
@@ -35,10 +38,7 @@ export default function DepartmentList({ onEdit }) {
                   <td><code className="dept-code">{dept.code}</code></td>
                   <td>{dept.name}</td>
                   <td className="actions">
-                    <button
-                      className="btn-edit"
-                      onClick={() => onEdit(dept)}
-                    >
+                    <button className="btn-edit" onClick={() => onEdit(dept)}>
                       Edit
                     </button>
                     <button

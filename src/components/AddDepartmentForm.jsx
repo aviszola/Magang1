@@ -5,7 +5,7 @@ const STATUS_OPTIONS = ['draft', 'published', 'active'];
 
 const INITIAL = { name: '', code: '', status: 'draft' };
 
-export default function AddDepartmentForm({ editItem, onCancelEdit }) {
+export default function AddDepartmentForm({ editItem, onSuccess }) {
   const [form, setForm] = useState(() => ({
     name: editItem?.name ?? '',
     code: editItem?.code ?? '',
@@ -33,7 +33,7 @@ export default function AddDepartmentForm({ editItem, onCancelEdit }) {
     if (!form.code.trim()) errs.code = 'Kode Department wajib diisi';
     else if (!/^[A-Z0-9_-]+$/.test(form.code.trim()))
       errs.code = 'Hanya huruf besar, angka, tanda hubung ( - _ )';
-    if (!form.status) errs.status = 'Status harus dipilih';
+    if (!form.status) errs.status = 'Pilih Status';
     setErrors(errs);
     return Object.keys(errs).length === 0;
   }
@@ -55,8 +55,7 @@ export default function AddDepartmentForm({ editItem, onCancelEdit }) {
         await createMutation.mutateAsync(payload);
       }
       setForm(INITIAL);
-      setErrors({});
-      onCancelEdit?.();
+      onSuccess?.();
     } catch (err) {
       setServerError(
         err.response?.data?.errors?.[0]?.message ?? 'Gagal menyimpan data'
@@ -64,21 +63,9 @@ export default function AddDepartmentForm({ editItem, onCancelEdit }) {
     }
   }
 
-  function handleCancel() {
-    setForm(INITIAL);
-    setErrors({});
-    setServerError('');
-    onCancelEdit?.();
-  }
-
   return (
     <form onSubmit={handleSubmit} className="dept-form" noValidate>
       <h2>{isEditing ? 'Edit Department' : 'Tambah Department'}</h2>
-      {isEditing && (
-        <p className="edit-indicator">
-          Sedang mengedit: <strong>{editItem.name}</strong>
-        </p>
-      )}
 
       <div className={`field ${errors.name ? 'field-error' : ''}`}>
         <label htmlFor="dept-name">Nama Department *</label>
@@ -112,10 +99,9 @@ export default function AddDepartmentForm({ editItem, onCancelEdit }) {
             value={form.status}
             onChange={(e) => setField('status', e.target.value)}
           >
+            <option value="" disabled>Pilih Status</option>
             {STATUS_OPTIONS.map((s) => (
-              <option key={s} value={s}>
-                {s}
-              </option>
+              <option key={s} value={s}>{s}</option>
             ))}
           </select>
         </div>
@@ -126,17 +112,8 @@ export default function AddDepartmentForm({ editItem, onCancelEdit }) {
 
       <div className="form-actions">
         <button type="submit" disabled={isPending}>
-          {isPending
-            ? 'Menyimpan...'
-            : isEditing
-              ? 'Simpan Perubahan'
-              : 'Tambah'}
+          {isPending ? 'Menyimpan...' : isEditing ? 'Simpan Perubahan' : 'Tambah'}
         </button>
-        {isEditing && (
-          <button type="button" className="btn-cancel" onClick={handleCancel}>
-            Batal
-          </button>
-        )}
       </div>
     </form>
   );
