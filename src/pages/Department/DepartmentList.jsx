@@ -1,37 +1,51 @@
-import { useState, useMemo } from 'react';
-import { useDepartments, useDeleteDepartment } from '../../hooks/useDepartments';
+import { useState } from 'react';
+import { getDepartments, deleteDepartment } from '../../hooks/useDepartment';
 import DataTable from '../../common/DataTable';
 import StatusBadge from '../../common/StatusBadge';
 import ConfirmDialog from '../../common/ConfirmDialog';
 
 const COLUMNS = [
   {
+    key: 'departmentId',
+    label: 'ID Number',
+    render: (row) => row.departmentId ?? '-',
+  },
+  { key: 'code', label: 'Code' },
+  { key: 'name', label: 'Name' },
+  {
     key: 'status',
     label: 'Status',
     render: (row) => <StatusBadge status={row.status} />,
   },
-  { key: 'code', label: 'Kode' },
-  { key: 'name', label: 'Nama Department' },
 ];
 
 export default function DepartmentList({ search, onSearchChange, onAdd, onEdit }) {
-  const { data: depts, isLoading, isError, error } = useDepartments();
-  const deleteMutation = useDeleteDepartment();
+  const { data: depts, isLoading, isError, error } = getDepartments();
+  const deleteMutation = deleteDepartment();
   const [deleteTarget, setDeleteTarget] = useState(null);
   const [deleteError, setDeleteError] = useState('');
   const [deleteSuccess, setDeleteSuccess] = useState('');
 
-  const filtered = useMemo(() => {
-    if (!depts) return [];
-    if (!search.trim()) return depts;
+  // Map API response ke row model tabel
+  const rows = (depts || []).map((d) => ({
+    id: d.id,
+    code: d.code,
+    name: d.name,
+    departmentId: d.department_level?.id_number ?? '-',
+    status: d.status,
+    // Simpan object relasi utuh untuk form edit
+    _department_level: d.department_level,
+  }));
+
+  const filtered = rows.filter((r) => {
+    if (!search.trim()) return true;
     const q = search.toLowerCase();
-    return depts.filter(
-      (d) =>
-        d.name?.toLowerCase().includes(q) ||
-        d.code?.toLowerCase().includes(q) ||
-        d.status?.toLowerCase().includes(q)
+    return (
+      r.departmentId?.toLowerCase().includes(q) ||
+      r.code?.toLowerCase().includes(q) ||
+      r.name?.toLowerCase().includes(q)
     );
-  }, [depts, search]);
+  });
 
   function handleConfirmDelete() {
     if (!deleteTarget) return;

@@ -1,10 +1,10 @@
 import Modal from '../../common/Modal';
-import AddDepartmentForm from './AddDepartmentForm';
+import DepartmentForm from './DepartmentForm';
 
 export default function DepartmentModal({ open, editItem, onClose }) {
   return (
     <Modal open={open} onClose={onClose}>
-      <AddDepartmentForm editItem={editItem} onSuccess={onClose} />
+      <DepartmentForm editItem={editItem} onSuccess={onClose} />
     </Modal>
   );
 }

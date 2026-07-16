@@ -1,25 +1,20 @@
 import { useState } from 'react';
 
 /**
- * Hook untuk standarisasi form CRUD:
- * - state errors / serverError / successMsg
- * - setField (clear errors on change)
- * - validate terhadap Zod schema
- * - handler sukses/gagal
+ * Hook reusable untuk form CRUD.
+ * Menangani state form, validasi Zod, error/success message.
  *
- * Contoh:
- *   const form = useFormSubmit({ schema, initial: { name: '', status: 'draft' } });
- *   form.setField('name', 'xxx');
- *   form.validate(); // → true/false
- *   form.handleSuccess('Berhasil!');
- *   form.handleError(err);
+ * @param {object} options
+ * @param {import('zod').ZodSchema} options.schema   — Zod schema untuk validasi
+ * @param {object} options.initial                   — nilai awal form
  */
-export function useFormSubmit({ schema, initial }) {
+export function useCrudForm({ schema, initial }) {
   const [form, setForm] = useState(initial);
   const [errors, setErrors] = useState({});
   const [serverError, setServerError] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
 
+  /** Set nilai field, hapus error field yg bersangkutan */
   function setField(field, value) {
     setForm((prev) => ({ ...prev, [field]: value }));
     if (errors[field]) setErrors((prev) => ({ ...prev, [field]: '' }));
@@ -27,6 +22,7 @@ export function useFormSubmit({ schema, initial }) {
     if (successMsg) setSuccessMsg('');
   }
 
+  /** Validasi form pakai Zod, return true/false */
   function validate() {
     const result = schema.safeParse(form);
     if (result.success) {
@@ -42,6 +38,7 @@ export function useFormSubmit({ schema, initial }) {
     return false;
   }
 
+  /** Reset form ke nilai awal */
   function resetForm() {
     setForm(initial);
     setErrors({});

@@ -1,8 +1,5 @@
 import useAuth from './hooks/useAuth';
 import DepartmentPage from './pages/Department';
-import RolePage from './pages/Role';
-import VehiclePage from './pages/Vehicle';
-import UserPage from './pages/User';
 import './App.css';
 
 export default function App() {
@@ -19,12 +16,6 @@ export default function App() {
   return (
     <div className="app">
       <DepartmentPage />
-      <hr className="page-divider" />
-      <RolePage />
-      <hr className="page-divider" />
-      <VehiclePage />
-      <hr className="page-divider" />
-      <UserPage />
     </div>
   );
 }
